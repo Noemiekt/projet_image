@@ -1,21 +1,22 @@
-function [H] = homographie_arm(XU, YU, XR, YR)
-
-    % J'ai 4 points 
-
-    A = [XU(1) YU(1) 1 0 0 0 -XU(1)*XR(1) -YU(1)*XR(1);
-             0 0 0 XU(1) YU(1) 1 -XU(1)*YR(1) -YU(1)*YR(1);
-             XU(2) YU(2) 1 0 0 0 -XU(2)*XR(2) -YU(2)*XR(2);
-             0 0 0 XU(2) YU(2) 1 -XU(2)*YR(2) -YU(2)*YR(2);
-             XU(3) YU(3) 1 0 0 0 -XU(3)*XR(3) -YU(3)*XR(3);
-             0 0 0 XU(3) YU(3) 1 -XU(3)*YR(3) -YU(3)*YR(3);
-             XU(4) YU(4) 1 0 0 0 -XU(4)*XR(4) -YU(4)*XR(4);
-             0 0 0 XU(4) YU(4) 1 -XU(4)*YR(4) -YU(4)*YR(4);];
+function [H, Hform] = homographie_arm(XU, YU, XR, YR)
     
-    B = [XR(1); YR(1); XR(2); YR(2); XR(3); YR(3); XR(4); YR(4)];
+    % Estimer l'homographie
+    tform = fitgeotrans([XU', YU'], [XR', YR'], 'projective');
 
+    % Obtenir la matrice d'homographie
+    Hform = tform.T;
+    
+    A = zeros(8, 8);
+    B = zeros(8, 1);
+    
+    for i = 1:4
+        A(2*i-1, :) = [XU(i), YU(i), 1, 0, 0, 0, -XU(i)*XR(i), -YU(i)*XR(i)];
+        A(2*i, :) = [0, 0, 0, XU(i), YU(i), 1, -XU(i)*YR(i), -YU(i)*YR(i)];
+        B(2*i-1) = XR(i);
+        B(2*i) = YR(i);
+    end
+    
     X = A\B;
-
-    H = [X(1) X(2) X(3) ; X(4) X(5) X(6) ; X(7) X(8) 1];
-
+    H = reshape([X; 1], 3, 3);
 end
 
