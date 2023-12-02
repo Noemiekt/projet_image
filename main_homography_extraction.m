@@ -5,7 +5,7 @@ clear; close all;
 % Main script to perform image extraction using homography
 
 % Load the source image 
-sourceImg = imread('images/picture_arm.jpeg');
+sourceImg = imread('images/voiture.jpg');
 
 % Display the source image ans selct 4 points
 imshow(sourceImg);
@@ -14,8 +14,8 @@ title('Select 4 points on the image');
 [XU, YU] = ginput(4); 
 
 % Destination points
-width = 200; 
-height = 200;
+width = 512; 
+height = 256;
 XR = [1, width, width, 1]; % dest points in X
 YR = [1, 1, height, height]; % dest points in Y
 
