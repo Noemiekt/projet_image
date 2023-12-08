@@ -16,8 +16,8 @@ title('Selectionnez les 4 points du premier tableau à échanger');
 [XU, YU] = ginput(4); 
 
 % Destination points
-width = 5120; 
-height = 2560;
+width = 512; 
+height = 256;
 XR = [1, width, width, 1]; % dest points in X
 YR = [1, 1, height, height]; % dest points in Y
 

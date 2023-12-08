@@ -18,12 +18,8 @@ function [extractedImg] = extraction(invH,sourceImg,h,w)
             x2 = round(M(1)/M(3));
             y2 = round(M(2)/M(3));
 
-            % Check if the transformed coordinates are within the bounds of the source image
-            if (x2 >= 1 && x2 <= size(sourceImg, 2)) && (y2 >= 1 && y2 <= size(sourceImg, 1))
-                % Copy the pixel value from the source image to the extracted image
-                extractedImg(y, x, :) = sourceImg(y2, x2, :);
-            end
-
+            % Copy the pixel value from the source image to the extracted image
+            extractedImg(y, x, :) = sourceImg(y2, x2, :);
         end
     end
 
