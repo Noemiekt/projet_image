@@ -5,7 +5,7 @@ clear; close all;
 % Main script to perform image extraction using homography
 
 % Load the source image 
-sourceImg = imread('images/tab.jpg');
+sourceImg = imread('images/google_map.png');
 
 
 
