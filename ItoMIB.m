@@ -5,10 +5,10 @@ function [MIB] = ItoMIB(I)
 
     MIB.I = I;
 
-    MIB.x_min = 1;
-    MIB.y_min = 1;
-    MIB.x_max = h;
-    MIB.y_max = w;
+    MIB.xmin = 1;
+    MIB.ymin = 1;
+    MIB.xmax = h;
+    MIB.ymax = w;
 
 
 end
