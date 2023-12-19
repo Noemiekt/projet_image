@@ -7,8 +7,8 @@ function [MIB] = ItoMIB(I)
 
     MIB.xmin = 1;
     MIB.ymin = 1;
-    MIB.xmax = h;
-    MIB.ymax = w;
+    MIB.xmax = w;
+    MIB.ymax = h;
 
 
 end
