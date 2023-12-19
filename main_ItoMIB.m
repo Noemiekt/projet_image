@@ -8,8 +8,6 @@ dbstop if error;
 % Load the source image 
 sourceImg = imread('images/tab.jpg');
 
-
-
 % Display the source image 
 imshow(sourceImg);
 

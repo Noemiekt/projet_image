@@ -24,7 +24,7 @@ function [MIBout] = MIB_transfoAlex(MIBin,H)
     w = MIBout.ymax - MIBout.ymin + 1;
 
     MIBout.M=zeros(h,w);
-    MIBout.I=zeros(h,w);
+    MIBout.I=zeros(h,w,3);
 
     for x = MIBout.xmin:MIBout.xmax
         for y = MIBout.ymin:MIBout.ymax
@@ -38,8 +38,10 @@ function [MIBout] = MIB_transfoAlex(MIBin,H)
     
             % Vérifier que les coordonnées calculées sont à l'intérieur des dimensions de l'image d'origine
             if (((XU<=MIBin.xmax)&&(XU>=MIBin.xmin)) && ((YU<=MIBin.ymax)&&(YU>=MIBin.ymin)))
+                disp("bite");
+                
                 MIBout.M(y-MIBout.ymin+1,x-MIBout.xmin+1, :) =1;
-                MIBout.I(y-MIBout.ymin+1,x-MIBout.xmin+1, :) = MIBin.I(round(YU)-MIBin.xmin+1, round(XU)-MIBin.ymin+1, :);
+                MIBout.I(y-MIBout.ymin+1,x-MIBout.xmin+1, :) = MIBin.I(round(YU)-MIBin.ymin+1, round(XU)-MIBin.xmin+1, :);
     
             end   
             

@@ -1,7 +1,7 @@
 function [MIB2] = MIB_transform(MIB1,H)
 
     X = [MIB1.xmin, MIB1.xmin,MIB1.xmax, MIB1.xmax];
-    Y = [MIB1.ymin; MIB1.ymax,MIB1.ymin, MIB1.ymax];
+    Y = [MIB1.ymin, MIB1.ymax,MIB1.ymin, MIB1.ymax];
 
     
 

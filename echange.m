@@ -24,7 +24,6 @@ for i = 1:n
         if (((XU<=1)&&(XU>=-1)) && ((YU<=1)&&(YU>=-1)))
             homog_coord2 = Hitoj * [j; i; 1];
 
-            disp(j);
 
             XU2 = homog_coord2(1) / homog_coord2(3);
             YU2 = homog_coord2(2) / homog_coord2(3);

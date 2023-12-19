@@ -21,7 +21,7 @@ h = MIBout.xmax - MIBout.xmin + 1;
 w = MIBout.ymax - MIBout.ymin + 1;
 
 MIBout.M=zeros(h,w);
-MIBout.I=zeros(h,w);
+MIBout.I=zeros(h,w,3);
 
 for i=1:n
     xstart=MIBin{i}.xmin-MIBout.xmin+1;
