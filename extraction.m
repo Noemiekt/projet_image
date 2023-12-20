@@ -1,27 +1,20 @@
-function [extractedImg] = extraction(invH,sourceImg,h,w)
+function [imgExt] = extraction(H, img, h, w)
+    % Cette fonction prend une homographie H, une image img, et les dimensions h et w
+    % Elle extrait une région de l'image transformée par H pour former une nouvelle image imgExt.
 
-    % Function to extract a region from a source image using the inverse homography matrix
-    % invH: Inverse homography matrix
-    % sourceImg: The source image from which to extract the region
-    % h, w: Height and width of the target (extracted) image
+    % Initialisation d'une nouvelle image
+    imgExt = zeros(h, w, 3);
 
-    % Initialize the extracted image with zeros. It has the same number of color channels as the source image.
-    extractedImg = zeros(h, w, size(sourceImg, 3), 'like', sourceImg);
+    % Parcours du rectangle d'arrivée
+    for xr = 1:w
+        for yr = 1:h
+            % Transformation inverse par l'homographie
+            Hcoord = inv(H) * [xr; yr; 1];
+            ximg = Hcoord(1) / Hcoord(3);
+            yimg = Hcoord(2) / Hcoord(3);
 
-    for x = 1:w
-        for y = 1:h
-            % Apply invH to each pixel
-            M = invH * double([x; y; 1]);
-            
-            % For each pixel in the target image, compute the corresponding
-            % coordinates in the source image by applying invH
-            x2 = round(M(1)/M(3));
-            y2 = round(M(2)/M(3));
-
-            % Copy the pixel value from the source image to the extracted image
-            extractedImg(y, x, :) = sourceImg(y2, x2, :);
+            % Copie des données de l'image transformée vers l'image extraite
+            imgExt(yr, xr, :) = img(round(yimg), round(ximg), :);
         end
     end
-
 end
-

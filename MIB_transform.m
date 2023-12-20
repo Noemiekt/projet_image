@@ -1,59 +1,48 @@
-function [MIB2] = MIB_transform(MIB1,H)
+function [MIBout] = MIB_transform(MIBin, H)
+    %% Initialisation de MIBout.B
+    X = [MIBin.xmin, MIBin.xmin, MIBin.xmax, MIBin.xmax];
+    Y = [MIBin.ymin, MIBin.ymax, MIBin.ymin, MIBin.ymax];
+    
+    % Initialisation des coordonnées minimales et maximales de la zone d'intérêt de sortie
+    MIBout.xmin = NaN;
+    MIBout.ymin = NaN;
+    MIBout.xmax = NaN;
+    MIBout.ymax = NaN;
 
-    X = [MIB1.xmin, MIB1.xmin,MIB1.xmax, MIB1.xmax];
-    Y = [MIB1.ymin, MIB1.ymax,MIB1.ymin, MIB1.ymax];
-
-
-
-    XU = zeros(1,4);
-    YU = zeros(1,4);
-
-
+    % Transformation des coins de la zone d'intérêt initiale avec la matrice d'homographie
     for i = 1:4
-        % Appliquer la matrice d'homographie inverse aux coordonnées transformées
-        homog_coord = H* [X(i); Y(i); 1];
-
-        XU(i) = homog_coord(1) / homog_coord(3);
-        YU(i) = homog_coord(2) / homog_coord(3);
-
+        homog_coord = H * [X(i); Y(i); 1];
+        XU = homog_coord(1) / homog_coord(3);
+        YU = homog_coord(2) / homog_coord(3);
+        MIBout.xmin = min(floor(XU), MIBout.xmin);
+        MIBout.ymin = min(floor(YU), MIBout.ymin);
+        MIBout.xmax = max(ceil(XU), MIBout.xmax);
+        MIBout.ymax = max(ceil(YU), MIBout.ymax);
     end
 
-    MIB2.xmin = min(floor(XU));
-    MIB2.ymin = min(floor(YU));
+    %% Initialisation de MIBout.M & MIBout.I
+    % Calcul des dimensions de la nouvelle image résultante
+    w = MIBout.xmax - MIBout.xmin + 1;
+    h = MIBout.ymax - MIBout.ymin + 1;
 
-    MIB2.xmax = max(ceil(XU));
-    MIB2.ymax = max(ceil(YU));
+    % Initialisation de la matrice M et de l'image I de sortie
+    MIBout.M = zeros(h, w);
+    MIBout.I = zeros(h, w, 3);
 
-
-
-    w = MIB2.xmax - MIB2.xmin + 1;
-    h = MIB2.ymax - MIB2.ymin + 1;
-
-    MIB2.I = zeros(h,w,3);
-    MIB2.M = zeros(h,w);
-    
-    
-    for x = MIB2.xmin:MIB2.xmax
-        
-        for y = MIB2.ymin:MIB2.ymax
-            
-            homog_coord = inv(H)* [x; y; 1];
-
+    % Parcours des pixels de la nouvelle image résultante
+    for x = MIBout.xmin:MIBout.xmax
+        for y = MIBout.ymin:MIBout.ymax
+            % Appliquer la matrice d'homographie inverse aux coordonnées transformées
+            homog_coord = inv(H) * [x; y; 1];
             XU = homog_coord(1) / homog_coord(3);
             YU = homog_coord(2) / homog_coord(3);
 
-            if (((YU<=MIB1.xmax)&&(YU>=MIB1.xmin) && ((XU<MIB1.ymax)&&(XU>MIB1.ymin))))
-
-                MIB2.M(x - MIB2.xmin +1 , y - MIB2.ymin +1) = 1;
-                MIB2.I(x - MIB2.xmin +1, y - MIB2.ymin +1, :) = MIB1.I(round(YU - MIB1.xmin), round(XU - MIB1.ymin) +1, :);
-              
-
+            % Vérifier que les coordonnées calculées sont à l'intérieur des dimensions de l'image d'origine
+            if (round(YU) >= MIBin.ymin && round(YU) <= MIBin.ymax && round(XU) >= MIBin.xmin && round(XU) <= MIBin.xmax)
+                % Remplir la matrice M et l'image I de sortie avec les valeurs de l'image d'entrée transformée
+                MIBout.M(y - MIBout.ymin + 1, x - MIBout.xmin + 1) = MIBin.M(round(YU) - MIBin.ymin + 1, round(XU) - MIBin.xmin + 1);
+                MIBout.I(y - MIBout.ymin + 1, x - MIBout.xmin + 1, :) = MIBin.I(round(YU) - MIBin.ymin + 1, round(XU) - MIBin.xmin + 1, :);
             end
-
-
         end
     end
-
-
 end
-

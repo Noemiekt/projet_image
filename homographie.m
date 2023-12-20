@@ -1,27 +1,25 @@
-function [H] = homographie(XU, YU, XR, YR)
+function [H] = homographie(Xsrc, Ysrc, Xdst, Ydst)
+    % Cette fonction calcule la matrice d'homographie H à partir de points correspondants
+    % dans l'image source (Xsrc, Ysrc) et l'image destination (Xdst, Ydst).
 
-% XU, YU: coordinates in the untransformed image
-% XR, YR: coordinates in the transformed image
-% H: homography matrix
-
+    % Initialisation des matrices A et B
     A = zeros(8, 8);
     B = zeros(8, 1);
 
+    % Boucle sur les quatre points correspondants
     for i = 1:4
-        % Construct A using the correspondance points 
-        A(2*i-1, :) = [XU(i), YU(i), 1, 0, 0, 0, -XU(i)*XR(i), -YU(i)*XR(i)];
-        A(2*i, :) = [0, 0, 0, XU(i), YU(i), 1, -XU(i)*YR(i), -YU(i)*YR(i)];
+        % Construction de la matrice A avec les points correspondants
+        A(2*i-1, :) = [Xsrc(i), Ysrc(i), 1, 0, 0, 0, -Xsrc(i)*Xdst(i), -Ysrc(i)*Xdst(i)];
+        A(2*i, :) = [0, 0, 0, Xsrc(i), Ysrc(i), 1, -Xsrc(i)*Ydst(i), -Ysrc(i)*Ydst(i)];
 
-        % Construct B using destination points
-        B(2*i-1) = XR(i);
-        B(2*i) = YR(i);
+        % Construction de la matrice B avec les points de destination
+        B(2*i-1) = Xdst(i);
+        B(2*i) = Ydst(i);
     end
 
-    % Solve for X using AX = B to define the elements of H matrix
+    % Résolution du système d'équations linéaires pour obtenir X (AX = B)
     X = A\B;
 
-    % Reshape the solution into a 3x3 matrix and add 1 at the end
+    % Reshape de la solution en une matrice 3x3 et ajout d'un 1 à la fin
     H = reshape([X; 1], 3, 3)';
 end
-
-
