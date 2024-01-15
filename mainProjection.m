@@ -13,9 +13,18 @@ subplot(1, 2, 1);
 imshow(uint8(img));
 title('Selectionnez 4 points');
 
-n = 4;
-% Capture des 4 points
-[Xdst, Ydst] = ginput(n);
+% Capture des 4 points 
+n = 4; 
+points = ginput(n);
+
+% Trie des points
+points = sortrows(points, [2, 1]);
+points(1:2,:) = sortrows(points(1:2,:), [1, 2]);
+points(3:4,:) = sortrows(points(3:4,:), [-1, 2]);
+
+Xdst = points(:, 1);
+Ydst = points(:, 2);
+
 
 % Affichez les points capturés sur l'image
 hold on;

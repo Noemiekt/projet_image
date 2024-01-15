@@ -20,11 +20,28 @@ n = 4;
 
 % Capturez 4 points de la première image
 subplot(1, 2, 1);
-[x1, y1] = ginput(n);
+points = ginput(n);
+
+% Trie des points
+points = sortrows(points, [2, 1]);
+points(1:2,:) = sortrows(points(1:2,:), [1, 2]);
+points(3:4,:) = sortrows(points(3:4,:), [-1, 2]);
+
+x1 = points(:, 1);
+y1 = points(:, 2);
+
 
 % Capturez 4 points de la deuxième image
 subplot(1, 2, 1);
-[x2, y2] = ginput(n);
+points = ginput(n);
+
+% Trie des points
+points = sortrows(points, [2, 1]);
+points(1:2,:) = sortrows(points(1:2,:), [1, 2]);
+points(3:4,:) = sortrows(points(3:4,:), [-1, 2]);
+
+x2 = points(:, 1);
+y2 = points(:, 2);
 
 % Affichez les points capturés sur la première image
 subplot(1, 2, 1);
